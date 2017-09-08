@@ -3,23 +3,40 @@ Weapon.delete_all
 
 puts "Generating records of categories and weapons..."
 
-# {Category: [Weapon1, Weapon2, ...]}
-WEAPONS_WITH_CATEGORIES = [
-  {"Roller"    => ["Carbon Roller", "Splat Roller", "Dynamo Roller", "Flingza Roller", "Hero Roller Replica"]},
-  {"Shooter"   => ["Splat Shooter", "Aerospray MG"]},
-  {"Charger"   => ["Splat Charger"]},
-  {"Dualies"   => ["Splat Dualies"]},
-  {"Splatling" => ["Heavy Splatling"]},
-  {"Brella"    => ["Splat Brella"]},
-  {"Slosher"   => ["Tri-Slosher"]}
-]
+CATEGORY_A = {
+  category: "CATEGORY_A",
+  weapons_with_categories: [
+    {category: "Roller", weapons: ["Carbon Roller", "Splat Roller", "Dynamo Roller", "Flingza Roller", "Hero Roller Replica"]},
+    {category: "Shooter", weapons: ["Splat Shooter", "Aerospray MG"]},
+    {category: "Charger", weapons: ["Splat Charger"]}
+  ]
+}
 
-WEAPONS_WITH_CATEGORIES.each do |weapons_with_category|
+CATEGORY_B = {
+  category: "CATEGORY_B",
+  weapons_with_categories: [
+    {category: "Dualies", weapons: ["Splat Dualies"]},
+    {category: "Splatling", weapons: ["Heavy Splatling"]}
+  ]
+}
+
+CATEGORY_C = {
+  category: "CATEGORY_C",
+  weapons_with_categories: [
+    {category: "Brella", weapons: ["Splat Brella"]},
+    {category: "Slosher", weapons: ["Tri-Slosher"]}
+  ]
+}
+
+[CATEGORY_A, CATEGORY_B, CATEGORY_C].each do |cate|
   ActiveRecord::Base.transaction do
-    weapons_with_category.each do |category, weapons|
-      created_category = Category.create!(name: category)
-      weapons.each do |weapon|
-        created_category.weapons.create!(name: weapon)
+    root_category = Category.create!(name: cate[:category])
+
+    cate[:weapons_with_categories].each do |weapons_with_category|
+      child_category = root_category.children.create!(name: weapons_with_category[:category])
+
+      weapons_with_category[:weapons].each do |weapon|
+        child_category.weapons.create!(name: weapon)
       end
     end
   end

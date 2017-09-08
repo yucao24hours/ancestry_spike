@@ -1,5 +1,5 @@
 class WeaponsController < ApplicationController
   def index
-    @categories = Category.all
+    @root_categories = Category.select {|category| category.root? }
   end
 end

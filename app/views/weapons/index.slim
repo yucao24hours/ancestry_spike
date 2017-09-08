@@ -1,4 +1,6 @@
-- @categories.each do |category|
-  h2= category.name
-  - category.weapons.each do |weapon|
-    li= weapon.name
+- @root_categories.each do |root_category|
+  h2= root_category.name
+  - root_category.children.each do |child_category|
+    h3= child_category.name
+    - child_category.weapons.each do |weapon|
+      li= weapon.name

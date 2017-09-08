@@ -1,5 +1,5 @@
 class WeaponsController < ApplicationController
   def index
-    @weapons = Weapon.all
+    @categories = Category.all
   end
 end

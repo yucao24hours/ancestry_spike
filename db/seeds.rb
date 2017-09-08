@@ -1,7 +1,28 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+Category.delete_all
+Weapon.delete_all
+
+puts "Generating records of categories and weapons..."
+
+# {Category: [Weapon1, Weapon2, ...]}
+WEAPONS_WITH_CATEGORIES = [
+  {"Roller"    => ["Carbon Roller", "Splat Roller", "Dynamo Roller", "Flingza Roller", "Hero Roller Replica"]},
+  {"Shooter"   => ["Splat Shooter", "Aerospray MG"]},
+  {"Charger"   => ["Splat Charger"]},
+  {"Dualies"   => ["Splat Dualies"]},
+  {"Splatling" => ["Heavy Splatling"]},
+  {"Brella"    => ["Splat Brella"]},
+  {"Slosher"   => ["Tri-Slosher"]}
+]
+
+WEAPONS_WITH_CATEGORIES.each do |weapons_with_category|
+  ActiveRecord::Base.transaction do
+    weapons_with_category.each do |category, weapons|
+      created_category = Category.create!(name: category)
+      weapons.each do |weapon|
+        created_category.weapons.create!(name: weapon)
+      end
+    end
+  end
+end
+
+puts "Done."
